@@ -1,0 +1,159 @@
+- name: Kubernetes cluster installation
+  hosts: all
+  become: true
+  pre_tasks:
+    - name: Add K8S into /etc/hosts file
+      ansible.builtin.lineinfile:
+        dest: /etc/hosts
+        regexp: '.*{{ item }}$'
+        line: "{{ hostvars[item].ansible_host }} {{ item }}"
+        state: present
+      when: hostvars[item].ansible_host is defined
+      with_items: "{{ groups.all }}"
+
+    - name: Update repository index and packages [Ubuntu]
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: true
+      changed_when: false
+
+    - name: Load br_netfilter module
+      community.general.system.modprobe:
+        name: br_netfilter
+        state: present
+
+    - name: Set sysctl parameters for Docker and Kubernetes
+      ansible.posix.sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+      loop: "{{ sysctl_config | dict2items }}"
+
+    - name: Remove SWAP configuration from /etc/fstab file
+      ansible.posix.mount:
+        name: "{{ item }}"
+        fstype: swap
+        state: absent
+      with_items:
+        - swap
+        - none
+
+    - name: Disable SWAP
+      ansible.builtin.command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+  tasks:
+    - name: Install Docker package
+      block:
+        - name: Installing Docker Engine.
+          ansible.builtin.package:
+            name: "{{ item }}"
+            state: present
+            force: true
+            install_recommends: false
+          loop: "{{ docker_packages }}"
+          notify: Docker_Status
+
+        - name: Add user to docker group
+          ansible.builtin.user:
+            name: "{{ k8s_user }}"
+            group: docker
+
+    - name: Install Kubernetes
+      block:
+        - name: Add K8S GPG Key
+          ansible.builtin.apt_key:
+            url: "{{ k8s_apt_key }}"
+            keyring: "{{ k8s_apt_local_key }}"
+
+        - name: Add K8S Repository
+          ansible.builtin.apt_repository:
+            repo: "{{ k8s_repository }}"
+            update_cache: true
+
+        - name: Install K8S dependencies
+          ansible.builtin.package:
+            name: "{{ item }}"
+            state: present
+            force: true
+            install_recommends: false
+          loop: "{{ k8s_dependencies }}"
+
+        - name: Install K8S packages
+          ansible.builtin.package:
+            name: "{{ item }}"
+            state: present
+            force: true
+            install_recommends: false
+          loop: "{{ k8s_packages }}"
+
+        - name: Prevent K8S packages from being upgraded
+          ansible.builtin.dpkg_selections:
+            name: "{{ item.split('=')[0] }}"
+            selection: hold
+          loop: "{{ k8s_packages }}"
+
+  handlers:
+    - name: Docker_Status
+      ansible.builtin.service:
+        name: docker
+        state: started
+
+
+- name: Configure K8S master node
+  hosts: master
+  become: true
+  tasks:
+    - name: Initialize master node
+      ansible.builtin.command:
+        cmd: kubeadm init --node-name k8s-master-1 --pod-network-cidr={{ k8s_network }} --apiserver-advertise-address {{ ansible_default_ipv4.address }}
+      args:
+        creates: /var/lib/kubelet/kubeadm-flags.env
+      notify:
+        - Create_K8S_config_directory
+        - Copy_K8S_config_file
+        - Install_K8S_network_driver
+        - Create_K8S_join_command
+
+  handlers:
+    - name: Create_K8S_config_directory
+      ansible.builtin.file:
+        path: "{{ k8s_user_home }}/.kube"
+        state: directory
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: 0765
+
+    - name: Copy_K8S_config_file
+      ansible.builtin.copy:
+        src: "{{ k8s_config_file }}"
+        dest: "{{ k8s_user_home }}/.kube/config"
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: 0644
+        remote_src: true
+
+    - name: Install_K8S_network_driver
+      become: false
+      ansible.builtin.command: kubectl apply -f {{ k8s_network_driver }}
+
+    - name: Create_K8S_join_command
+      ansible.builtin.command: kubeadm token create --print-join-command
+      register: join_command
+
+- name: Configure K8S slave nodes
+  hosts: nodes
+  become: true
+  tasks:
+    - name: Join nodes to the K8S cluster
+      ansible.builtin.command: "{{ hostvars.k8s_master_1.join_command.stdout }}"
+      when: hostvars.k8s_master_1.join_command is defined
+
+- name: Create K8S local configuration
+  hosts: master
+  tasks:
+    - name: Get {{ k8s_config_file }}
+      ansible.builtin.fetch:
+        src: "{{ k8s_home_config_file }}"
+        dest: "{{ local_home_config_file }}"
+        flat: true
