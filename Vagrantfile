@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
           vmware.vmx["memsize"] = 4096
       end
       machine.vm.provider :virtualbox do |vbox|
+        vbox.customize ["modifyvm", :id, "--nic1", "nat"]
         vbox.cpus = 2
         vbox.memory = 4096
       end
