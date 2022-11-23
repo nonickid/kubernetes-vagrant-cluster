@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
       end
       machine.vm.provider :virtualbox do |vbox|
         vbox.cpus = 2
-        vbox.cpus = 4096
+        vbox.memory = 4096
       end
 
       if machine_id == (master + node)
