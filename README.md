@@ -62,3 +62,23 @@ kube-system    kube-proxy-575sf                       1/1     Running   6 (18m a
 kube-system    kube-proxy-tbd7g                       1/1     Running   6 (19m ago)   3d
 kube-system    kube-scheduler-k8s-master-1            1/1     Running   6 (19m ago)   3d
 ```
+
+There is addiotnal tools installed on node master guest VM:
+- **`Helm`** - the package manager for Kubernetes (https://helm.sh)
+- **`k9s`** -  the terminal based UI to interact with Kubernetes clusters (https://k9scli.io)
+
+The tools can be used from the host as well:
+* **`Helm`**
+```console
+user:~/kubernetes-vagrant-cluster$ helm --kubeconfig k8s.config <parameters>
+
+# E.g
+user:~/kubernetes-vagrant-cluster$ helm --kubeconfig k8s.config install bitnami/nginx --generate-name
+```
+
+* **`k9s`**
+```console
+user:~/kubernetes-vagrant-cluster$ k9s --kubeconfig k8s.config
+```
+
+To configure **`Lens - The Kubernetes IDE`** (https://k8slens.dev) to connect to the cluster, import k8s.config file.
