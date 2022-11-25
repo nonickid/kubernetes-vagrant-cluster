@@ -18,7 +18,7 @@ node = 1
 > **Warning**
 >  Only one master node is supported in the build. Please do not increase `master` variable
 
-Each cluster nodes is configured to have 2 CPU and 4096 RAM memory. The configuration can be change in `Vagrantfile` in section:
+Each cluster nodes is configured to have 2 CPU and 4096 RAM memory. The configuration can be changed in `Vagrantfile` in section:
 
 ```C
 machine.vm.provider :vmware_fusion do |vmware|
