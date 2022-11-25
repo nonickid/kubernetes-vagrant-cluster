@@ -82,3 +82,8 @@ user:~/kubernetes-vagrant-cluster$ k9s --kubeconfig k8s.config
 ```
 
 To configure **`Lens - The Kubernetes IDE`** (https://k8slens.dev) to connect to the cluster, import `k8s.config` file.
+
+### TO-DO 
+```markdown
+- [ ] Implement Nginx-Ingress controller with MetalLB load-balancer.
+```
