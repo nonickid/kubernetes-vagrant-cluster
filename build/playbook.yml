@@ -149,11 +149,22 @@
       ansible.builtin.command: "{{ hostvars.k8s_master_1.join_command.stdout }}"
       when: hostvars.k8s_master_1.join_command is defined
 
+# - name: Create K8S local configuration
+#  hosts: master
+#  tasks:
+#    - name: Get {{ k8s_config_file }}
+#      ansible.builtin.fetch:
+#        src: "{{ k8s_home_config_file }}"
+#        dest: "{{ local_home_config_file }}"
+#        flat: true
+
 - name: Create K8S local configuration
   hosts: master
+  become: false
   tasks:
-    - name: Get {{ k8s_config_file }}
-      ansible.builtin.fetch:
+    - name: Copy K8s config file to the host
+      ansible.builtin.copy:
+        remote_src: true
         src: "{{ k8s_home_config_file }}"
-        dest: "{{ local_home_config_file }}"
-        flat: true
+        dest: "{{ k8s_host_config_file }}"
+        mode: '0644'
