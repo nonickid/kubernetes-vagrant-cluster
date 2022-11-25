@@ -67,7 +67,7 @@ There are additional tools installed on master node guest VM:
 - **`Helm`** - the package manager for Kubernetes (https://helm.sh)
 - **`k9s`** -  the terminal based UI to interact with Kubernetes clusters (https://k9scli.io)
 
-The tools can be used from the host as well:
+The tools can be used from the host if installed as well:
 * **`Helm`**
 ```console
 user:~/kubernetes-vagrant-cluster$ helm --kubeconfig k8s.config <parameters>
