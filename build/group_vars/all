@@ -12,6 +12,8 @@ k8s_packages:
   - kubelet=1.25.4-00
   - kubeadm=1.25.4-00
   - kubectl=1.25.4-00
+helm_package: "https://get.helm.sh/helm-canary-linux-amd64.tar.gz"
+k9s_package: "https://github.com/derailed/k9s/releases/download/v0.26.7/k9s_Linux_x86_64.tar.gz"
 k8s_apt_key: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
 k8s_apt_local_key: "/usr/share/keyrings/kubernetes-archive-keyring.gpg"
 k8s_repository: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"

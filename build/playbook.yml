@@ -167,4 +167,21 @@
         remote_src: true
         src: "{{ k8s_home_config_file }}"
         dest: "{{ k8s_host_config_file }}"
-        mode: '0644'
+        mode: '0700'
+
+- name: "Install K8S additional tools: Helm and K9s"
+  hosts: master
+  become: true
+  tasks:
+    - name: Install Helm
+      ansible.builtin.unarchive:
+        src: "{{ helm_package }}"
+        dest: /usr/local/bin
+        remote_src: true
+        extra_opts: [--strip-components=1]
+
+    - name: Install K9s
+      ansible.builtin.unarchive:
+        src: "{{ k9s_package }}"
+        dest: /usr/local/bin
+        remote_src: true
