@@ -21,7 +21,7 @@ k8s-master-1   Ready    control-plane   3d    v1.25.4
 k8s-node-1     Ready    <none>          3d    v1.25.4
 ```
 
-The K8S cluster can be reach from host using K8s configuration file:
+The K8S cluster can be also reached from host using K8s configuration file:
 
 ```console
 user:~/kubernetes-vagrant-cluster$ kubectl --kubeconfig k8s.config <options>
