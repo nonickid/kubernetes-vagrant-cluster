@@ -6,14 +6,14 @@ Vagrant as default assigns NAT interface to guest VM and the interface can be re
 
 In addition to `vagrant provision` method the ansible can be executed from host using following command:
 
-```shell-comand
-$ ansible-playbook build/playbook.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
+```console
+user:~/kubernetes-vagrant-cluster$ ansible-playbook build/playbook.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
 ```
 
 To start using K8S just log in into guest VM:
 
-```shell-command
-$ vagrant ssh k8s_master_1
+```console
+user:~/kubernetes-vagrant-cluster$ vagrant ssh k8s_master_1
 
 vagrant@k8s-master-1:~$ kubectl get nodes
 NAME           STATUS   ROLES           AGE   VERSION
@@ -23,16 +23,16 @@ k8s-node-1     Ready    <none>          3d    v1.25.4
 
 The K8S cluster can be reach from host using K8s configuration file:
 
-```shell-command
-$ kubectl --kubeconfig k8s.config <options>
+```console
+user:~/kubernetes-vagrant-cluster$ kubectl --kubeconfig k8s.config <options>
 
 # E.g
-$ kubectl --kubeconfig k8s.config get nodes
+user:~/kubernetes-vagrant-cluster$ kubectl --kubeconfig k8s.config get nodes
 NAME           STATUS   ROLES           AGE   VERSION
 k8s-master-1   Ready    control-plane   3d    v1.25.4
 k8s-node-1     Ready    <none>          3d    v1.25.4
 
-$ kubectl --kubeconfig k8s.config get pods --all-namespaces
+user:~/kubernetes-vagrant-cluster$ kubectl --kubeconfig k8s.config get pods --all-namespaces
 NAMESPACE      NAME                                   READY   STATUS    RESTARTS      AGE
 kube-flannel   kube-flannel-ds-tpw4f                  1/1     Running   8 (18m ago)   3d
 kube-flannel   kube-flannel-ds-wf8p9                  1/1     Running   6 (19m ago)   3d
