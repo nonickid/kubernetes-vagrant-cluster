@@ -81,4 +81,4 @@ user:~/kubernetes-vagrant-cluster$ helm --kubeconfig k8s.config install bitnami/
 user:~/kubernetes-vagrant-cluster$ k9s --kubeconfig k8s.config
 ```
 
-To configure **`Lens - The Kubernetes IDE`** (https://k8slens.dev) to connect to the cluster, import k8s.config file.
+To configure **`Lens - The Kubernetes IDE`** (https://k8slens.dev) to connect to the cluster, import `k8s.config` file.
