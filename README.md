@@ -2,7 +2,7 @@
 
 The build works only with Vmware Desktop/Fusion Virtualization Tool on Linux/Mac OS. Windows OS has a limitation related to Ansible provisioning usage.
 
-Vagrant as default assigns NAT interface to guest VM and the interface can be reached from host if Vmware Desktop/Fusion tool is used. Virtualbox is designed to not expose NAT interface to the host. 
+Vagrant as default assigns NAT interface to guest VM and the interface can be reached from host if Vmware Desktop/Fusion tool is used and the build based on this feature. Virtualbox is designed to not expose NAT interface to the host. 
 
 In addition to `vagrant provision` method the ansible can be executed from host using following command:
 
