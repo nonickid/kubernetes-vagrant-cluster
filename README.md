@@ -10,7 +10,7 @@ In addition to `vagrant provision` method the ansible can be executed from host 
 user:~/kubernetes-vagrant-cluster$ ansible-playbook build/playbook.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
 ```
 
-The build as default starts one master node and one slave node. To start mode slave nodes the following variable need to be modified in `Vagrantfile`:
+The build as default starts one master node and one slave node. To start more slave nodes the following variable need to be modified in `Vagrantfile`:
 ```C
 node = 1
 ```
