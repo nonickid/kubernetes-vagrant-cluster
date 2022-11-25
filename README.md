@@ -63,7 +63,7 @@ kube-system    kube-proxy-tbd7g                       1/1     Running   6 (19m a
 kube-system    kube-scheduler-k8s-master-1            1/1     Running   6 (19m ago)   3d
 ```
 
-There is addiotnal tools installed on node master guest VM:
+There are additional tools installed on master node guest VM:
 - **`Helm`** - the package manager for Kubernetes (https://helm.sh)
 - **`k9s`** -  the terminal based UI to interact with Kubernetes clusters (https://k9scli.io)
 
