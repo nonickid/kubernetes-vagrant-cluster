@@ -85,5 +85,6 @@ To configure **`Lens - The Kubernetes IDE`** (https://k8slens.dev) to connect to
 
 ### TO-DO 
 ```markdown
-- [ ] Implement Nginx-Ingress controller with MetalLB load-balancer.
+- [ ] Implement Nginx-Ingress controller with MetalLB load-balancer instalaltion.
+- [ ] Implement Kubernetes Dashboard instalaltion.
 ```
