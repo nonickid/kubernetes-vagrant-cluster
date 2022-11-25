@@ -10,6 +10,23 @@ In addition to `vagrant provision` method the ansible can be executed from host 
 user:~/kubernetes-vagrant-cluster$ ansible-playbook build/playbook.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
 ```
 
+The build as default starts one master node and one slave node. To start mode slave nodes the following variable need to be modified in `Vagrantfile`:
+```C
+node = 1
+```
+
+> **Warning**
+>  Only one master node is supported in the build. Please do not increase `master` variable
+
+Each cluster nodes is configured to have 2 CPU and 4096 RAM memory. The configuration can be change in `Vagrantfile` in section:
+
+```C
+machine.vm.provider :vmware_fusion do |vmware|
+  vmware.vmx["numvcpus"] = 2
+  vmware.vmx["memsize"] = 4096
+end
+```
+
 To start using K8S just log in into guest VM:
 
 ```console
